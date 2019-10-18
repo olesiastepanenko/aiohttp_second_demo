@@ -14,6 +14,8 @@ function getPosts(){
     })
     .done(posts => {
         posts.forEach(post => renderPost(post))
+        console.log(posts
+        )
     })
     .fail( () => {
         console.log("error")
