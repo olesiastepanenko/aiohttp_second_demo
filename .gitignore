@@ -1,0 +1,6 @@
+*~
+__pycache__
+.secondvenv
+.idea
+readme.txt
+data
