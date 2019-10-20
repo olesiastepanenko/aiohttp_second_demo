@@ -79,8 +79,8 @@ class CreatePost extends HTMLElement {
                     url: "/add_post",
                     data: data,
                     success: function (data) {
+                        $("#modal_fixed_overlay_add_post").css("display", "none");
                         renderPost(data);
-                        form[0].reset();
                     }
                 })
             }

@@ -2,7 +2,9 @@ from aiohttp import web
 import aiohttp_jinja2
 from datetime import datetime
 import json
+import bson
 from bson import ObjectId
+import sys
 
 
 @aiohttp_jinja2.template("index.html")
@@ -47,16 +49,30 @@ class JSONEncoder(json.JSONEncoder):
 
 
 async def show_posts(request: web.Request):
-    collection = "posts"
     db = request.app["db"]
-    data = []
-    async for col in db.get_collection(collection).find():
-        col.pop('_id')
-        col.update({'date_created': str(col.get('date_created'))})
-        # encoded = JSONEncoder().encode(col)
-        # print(encoded)
-        data.append(col)
-    if data:
-        return web.json_response(data)
+    print("db", db)
+    collection = db["posts"]
+    # cursor = collection.find({}, {"_id": 0, "title": 1, "date_created": 1})
+    posts = await collection.find({}, {"_id": 0, "title": 1, "image":1}).to_list(length=100)
+    if posts:
+        return web.json_response(posts)
     else:
         return web.Response(text="The are no posts")
+# pipeline = [{'$project': {"_id":("$_id")}}]
+# async for col in db.get_collection(collection).aggregate(pipeline):
+#     print("i=", i, col)
+#     return {"posts": posts}
+# else:
+#     return web.Response(text="The are no posts")
+
+# async for col in db.get_collection(collection).find():
+#     print("col" "i-", col)
+# col.pop('_id')
+# col.update({'date_created': str(col.get('date_created'))})
+# encoded = JSONEncoder().encode(col)
+# print("encoded", encoded)
+# data.append(encoded)
+# if encoded:
+#     return web.json_response(encoded)
+# else:
+#     return web.Response(text="The are no posts")

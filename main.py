@@ -35,7 +35,6 @@ def main():
     log = logging.getLogger()
 
     log.info("Launching application..")
-
     app = web.Application()
     # подключаюсь к клиенту
     app['db'] = init_mongo(get_config(config_path))

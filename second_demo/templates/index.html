@@ -4,15 +4,8 @@
 {% set title = "Tasty blog" %}
 
 {% block content %}
-<div class="nav">
-    <ul class="nav_pan">
-        <li class="nav_pan_el"><a href="{{url('index')}}">HOME</a> </li>
-        <li class="nav_pan_el"><a href="{{url('posts')}}">RECEPIES</a> </li>
-        <li class="nav_pan_el"><a href="#">ABOUT</a></li>
-    </ul>
-        <div class="new_post_button still_but">ADD NEW POST</div>
+
     <img class="main_img" src="{{ url('static', filename='images/main_foto.jpg') }}">
-</div>
 <div class="content_wrapper">
 <!--    <div id="content"></div>-->
 </div>

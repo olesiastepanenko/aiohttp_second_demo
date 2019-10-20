@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>{{title}}</title>
     <link rel=stylesheet type=text/css href="{{ url('static', filename='css/style.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url('static', filename='css/media_styles.css') }}">
     <!-- jQuery -->
     <script src="http://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
             crossorigin="anonymous"></script>
@@ -14,10 +15,19 @@
     {% endblock %}
 </head>
 <body>
+<div class="nav">
+    <div class="logo"><a href="{{url('index')}}"><img src="{{ url('static', filename='images/logo.png') }}"></a> </div>
+    <ul class="nav_pan">
+        <li class="nav_pan_el"><a href="{{url('index')}}">HOME</a> </li>
+        <li class="nav_pan_el"><a href="{{url('posts')}}">RECEPIES</a> </li>
+        <li class="nav_pan_el"><a href="#">ABOUT</a></li>
+    </ul>
+</div>
 <div class="wrapper">
             <div id="modal_fixed_overlay_add_post"><div class="modal_container_add_post"><create-post></create-post></div></div>
     {% block content %}
     {% endblock %}
+            <div class="new_post_button still_but">ADD NEW POST</div>
 </div>
 </body>
 </html>

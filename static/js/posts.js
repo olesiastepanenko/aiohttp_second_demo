@@ -13,21 +13,21 @@ function getPosts(){
         dataType: "json"
     })
     .done(posts => {
+        console.log(posts)
         posts.forEach(post => renderPost(post))
-        console.log(posts
-        )
     })
     .fail( () => {
         console.log("error")
     })
 }
 function renderPost(post) {
-    let title = $("<div />").addClass("post_title").text(post.title)
-    let image = $("<img />").addClass("post_image").attr("src", post.image)
-    let text = $("<div />").addClass("post_text").text(post.post_text)
+    let title = $("<div />").addClass("post_title").text(post.title);
+    let image = $("<img />").addClass("post_image").attr("src", post.image);
+//    let text = $("<div />").addClass("post_text").text(post.post_text);
+//    let date = $("<div />").addClass("post_date").text(post.date_created);
 
     $("<div />").addClass("post_body")
-        .append([title, image, text])
+        .append([image, title])
         .appendTo("#content")
 }
 
