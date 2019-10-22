@@ -3,32 +3,48 @@
 <head>
     {% block head %}
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
     <title>{{title}}</title>
     <link rel=stylesheet type=text/css href="{{ url('static', filename='css/style.css') }}">
     <link rel=stylesheet type=text/css href="{{ url('static', filename='css/media_styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
     <!-- jQuery -->
     <script src="http://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
             crossorigin="anonymous"></script>
     <!-- Javascript -->
+    <script src="{{url('static', filename='js/ready.js')}}"></script>
     <script src="{{url('static', filename='js/posts.js')}}"></script>
     <script src="{{url('static', filename='js/create_post.js')}}"></script>
     {% endblock %}
 </head>
-<body>
-<div class="nav">
-    <div class="logo"><a href="{{url('index')}}"><img src="{{ url('static', filename='images/logo.png') }}"></a> </div>
-    <ul class="nav_pan">
-        <li class="nav_pan_el"><a href="{{url('index')}}">HOME</a> </li>
-        <li class="nav_pan_el"><a href="{{url('posts')}}">RECEPIES</a> </li>
-        <li class="nav_pan_el"><a href="#">ABOUT</a></li>
-    </ul>
-</div>
+<body class="page_project_index">
 <div class="wrapper">
-            <div id="modal_fixed_overlay_add_post"><div class="modal_container_add_post"><create-post></create-post></div></div>
-    {% block content %}
-    {% endblock %}
-            <div class="new_post_button still_but">ADD NEW POST</div>
+    <div class="nav">
+<!--        <div class="logo"><a href="{{url('index')}}"><img src="{{ url('static', filename='images/logo.png') }}"></a>-->
+<!--        </div>-->
+        <ul class="nav_pan">
+            <li class="nav_pan_el"><a href="{{url('index')}}">HOME</a></li>
+            <li class="nav_pan_el"><a href="{{url('posts')}}">RECEPIES</a></li>
+            <li class="nav_pan_el"><a href="#">ABOUT</a></li>
+        </ul>
+    </div>
+    <div id="modal_fixed_overlay_add_post">
+        <div class="modal_container_add_post">
+            <span class="lnr lnr-cross icon-close"></span>
+            <create-post></create-post>
+        </div>
+    </div>
+    <div class="content_wrapper">
+        <div class="content_scrollable">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+    <div class="new_post_button still_but">ADD NEW POST</div>
 </div>
+<div class="footer"><img src="{{ url('static', filename='images/footer.png') }}"></div>
 </body>
 </html>
 

@@ -22,12 +22,13 @@ async def index(request: web.Request):
 async def add_post(request: web.Request):
     in_data = await request.post()
     data_dict = {
+        "topic": in_data["topic"],
         "title": in_data["title"],
         "post_text": in_data["text"],
         "date_created": str(datetime.utcnow().replace(microsecond=0)),
         "image": in_data["image"]
     }
-    print(data_dict)
+    print("new post added", data_dict)
     await request.app["db"].posts.insert_one(data_dict)
     # return web.HTTPFound(location=request.app.router['index'].url_for())
     return web.json_response({"title": data_dict["title"],
@@ -53,26 +54,26 @@ async def show_posts(request: web.Request):
     print("db", db)
     collection = db["posts"]
     # cursor = collection.find({}, {"_id": 0, "title": 1, "date_created": 1})
-    posts = await collection.find({}, {"_id": 0, "title": 1, "image":1}).to_list(length=100)
+    posts = await collection.find({}, {"_id": 0, "topic": 1, "title": 1, "image": 1}).to_list(length=100)
     if posts:
         return web.json_response(posts)
     else:
         return web.Response(text="The are no posts")
-# pipeline = [{'$project': {"_id":("$_id")}}]
-# async for col in db.get_collection(collection).aggregate(pipeline):
-#     print("i=", i, col)
-#     return {"posts": posts}
-# else:
-#     return web.Response(text="The are no posts")
 
-# async for col in db.get_collection(collection).find():
-#     print("col" "i-", col)
-# col.pop('_id')
-# col.update({'date_created': str(col.get('date_created'))})
-# encoded = JSONEncoder().encode(col)
-# print("encoded", encoded)
-# data.append(encoded)
-# if encoded:
-#     return web.json_response(encoded)
-# else:
-#     return web.Response(text="The are no posts")
+
+async def count_topic(request: web.Request):
+    db = request.app["db"]
+    collection = db["posts"]
+    pipeline = [{"$group": {"_id": "$topic", "count": {"$sum": 1}}}]
+    topics = []
+    async for doc in collection.aggregate(pipeline):
+        topics.append(doc)
+    if topics:
+        return web.json_response(topics)
+    else:
+        return web.Response(text="The are no posts")
+
+
+@aiohttp_jinja2.template("topic.html")
+async def topic(request: web.Request):
+    pass

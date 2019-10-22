@@ -5,8 +5,26 @@
 
 {% block content %}
 
-    <img class="main_img" src="{{ url('static', filename='images/main_foto.jpg') }}">
-<div class="content_wrapper">
-<!--    <div id="content"></div>-->
+<!--    <img class="main_img" src="{{ url('static', filename='images/main_foto.jpg') }}">-->
+<div class="topic_wrapper">
+    <div class="topic meat">
+        <span class="topic_count"></span>
+        <a href="/topic">
+            <img class="topic_img" src="{{ url('static', filename='images/meat.png') }}">
+        </a>
+    </div>
+    <div class="topic fish">
+        <span class="topic_count"></span>
+        <img class="topic_img" src="{{ url('static', filename='images/fish.png') }}">
+    </div>
+    <div class="topic dessert">
+        <span class="topic_count"></span>
+        <img class="topic_img" src="{{ url('static', filename='images/dessert.png') }}">
+    </div>
+    <div class="topic vegetarian">
+        <span class="topic_count"></span>
+        <img class="topic_img" src="{{ url('static', filename='images/vegetarian.png') }}">
+    </div>
 </div>
+    <!--    <div id="content"></div>-->
 {% endblock %}

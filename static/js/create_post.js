@@ -5,7 +5,17 @@ class CreatePost extends HTMLElement {
             .attr("enctype", "multipart/form-data")
             .attr("method", "POST");
 
+        let topic = document.createElement('SELECT');
+        $(topic).addClass("post_form")
+            .addClass("empty_field")
+            .attr("name", "topic")
+            .attr("id", "post_topic");
+        topic.insertAdjacentHTML('afterbegin', ' <select name="dishes"> <option value="meat">Meat dishes</option> <option value="fish">Fish dishes</option> <option value="vegetarian">Vegetarian dishes</option> <option value="dessert">Dessert</option> </select> ');
+        form.append(topic);
+        topic.insertAdjacentHTML('beforebegin', '<label for="topic">Choose chapter</label>');
+
         let title = document.createElement('INPUT');
+//        let title = $(":input");
         $(title).attr("id", "title")
             .addClass("post_form")
             .addClass("empty_field")
@@ -48,6 +58,7 @@ class CreatePost extends HTMLElement {
         }
         let form = $(".add_new_post");
         form.find(".post_form").each(function () {
+        // check that felds are not empty
             $(this).change(function () {
                 if ($(this).val().length == 0) {
                     $(this).addClass("empty_field");
@@ -60,16 +71,18 @@ class CreatePost extends HTMLElement {
             })
         });
         $("#create_post").on("click", function () {
-            var title, text, data;
+            var title, topic, text, data;
             if (form.find(".empty_field").length > 0) {
                 form.find(".empty_field").each(function () {
                     $(this).addClass("empty_field_syles")
                 })
             } else {
                 console.log("All fields are not empty, ready for Ajax");
+                topic = $("#post_topic").val();
                 title = $("#title").val();
                 text = $("#post_text").val();
                 data = {
+                    topic: topic,
                     title: title,
                     text: text,
                     image: temp,
@@ -79,7 +92,7 @@ class CreatePost extends HTMLElement {
                     url: "/add_post",
                     data: data,
                     success: function (data) {
-                        $("#modal_fixed_overlay_add_post").css("display", "none");
+                        closeModalCreatePost();
                         renderPost(data);
                     }
                 })
@@ -110,4 +123,8 @@ function encodeImageFileAsURL(element) {
         return temp
     }
     reader.readAsDataURL(file);
+}
+
+function closeModalCreatePost(){
+    $("#modal_fixed_overlay_add_post").css("display", "none");
 }
