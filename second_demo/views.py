@@ -31,10 +31,14 @@ async def add_post(request: web.Request):
 
 
 async def add_comment(request: web.Request):
-    in_data = await request.post()
-    print("new comment",in_data, request, request.app, request.text())
-    location = "/"
-    return web.HTTPFound(location=location)
+    in_data = await request.json()
+    # print("new comment",in_data)
+    created_comment = await Posts.add_comment(db=request.app["db"],
+                                        name=in_data["name"],
+                                        title = in_data["title"], post_id=in_data["post_id"])
+    # location = "/"
+    # return web.HTTPFound(location=location)
+    return web.json_response(created_comment)
 
 
 @aiohttp_jinja2.template("posts.html")
