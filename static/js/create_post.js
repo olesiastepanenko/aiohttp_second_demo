@@ -85,15 +85,17 @@ class CreatePost extends HTMLElement {
                     topic: topic,
                     title: title,
                     text: text,
-                    image: temp,
+                    img: temp,
                 };
                 $.ajax({
                     type: "POST",
-                    url: "/add_post",
+                    url: "/api/add_post",
                     data: data,
                     success: function (data) {
                         closeModalCreatePost();
-                        renderPost(data);
+//                        postById("/recipe/" + data._id)
+                        console.log("data", data, typeof(data))
+//                        renderPost(data);
                     }
                 })
             }

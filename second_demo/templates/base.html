@@ -24,6 +24,7 @@
     <div class="nav">
 <!--        <div class="logo"><a href="{{url('index')}}"><img src="{{ url('static', filename='images/logo.png') }}"></a>-->
 <!--        </div>-->
+        <span class="lnr lnr-menu mobile_nav"></span>
         <ul class="nav_pan">
             <li class="nav_pan_el"><a href="{{url('index')}}">HOME</a></li>
             <li class="nav_pan_el"><a href="{{url('posts')}}">RECEPIES</a></li>
@@ -38,8 +39,11 @@
     </div>
     <div class="content_wrapper">
         <div class="content_scrollable">
+             <div id="content">
+
             {% block content %}
             {% endblock %}
+                 </div>
         </div>
     </div>
     <div class="new_post_button still_but">ADD NEW POST</div>

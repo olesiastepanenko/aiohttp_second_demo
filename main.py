@@ -2,7 +2,6 @@ import os
 import sys
 
 from aiohttp import web
-import pathlib
 from second_demo.routes import setup_routes
 import aiohttp_jinja2
 import jinja2

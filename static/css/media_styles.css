@@ -1,5 +1,23 @@
 @media only screen and (max-width: 480px){
 /* Smartphones */
+    .mobile_nav{
+        display: block;
+        position: fixed;
+        color: #90d5de;
+        font-size: 4em;
+        font-size: 3.5em;
+        top: 0;
+        left: 0;
+    }
+    .nav_pan{
+        display: none;
+    }
+    .topic {
+        width: 100%;
+    }
+    .line__wrap{
+        display: none;
+    }
     .post_body {
         width: 50%;
         padding: 20px 10px;
@@ -9,6 +27,14 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+    .new_post_button {
+        top: 10px;
+        right: 10px;
+    }
+    .still_but {
+        padding: 4px 20px;
+
     }
 }
 
