@@ -2,6 +2,7 @@ from aiohttp import web
 import aiohttp_jinja2
 from .models import Posts
 
+
 def redirect(router, route_name):
     location = router[route_name].url_for()
     print(location, route_name)
@@ -18,9 +19,10 @@ async def add_post(request: web.Request):
     print("new post", request, request.body_exists)
     created_post = await Posts.add_post(db=request.app["db"],
                                         title=in_data["title"],
-                                        post_text=in_data["text"], topic=in_data["topic"],
+                                        post_text=in_data["text"],
+                                        topic=in_data["topic"],
                                         image=in_data["img"])
-    location = "/recipe/"+created_post["_id"]
+    location = "/recipe/" + created_post["_id"]
     # print(location)
     # raise redirect(request.app.router, 'post_by_id')
     return web.HTTPFound(location=location)
@@ -32,12 +34,11 @@ async def add_post(request: web.Request):
 
 async def add_comment(request: web.Request):
     in_data = await request.json()
-    # print("new comment",in_data)
     created_comment = await Posts.add_comment(db=request.app["db"],
-                                        name=in_data["name"],
-                                        title = in_data["title"], post_id=in_data["post_id"])
-    # location = "/"
-    # return web.HTTPFound(location=location)
+                                              name=in_data["name"],
+                                              title=in_data["title"],
+                                              text=in_data["text"],
+                                              post_id=in_data["post_id"])
     return web.json_response(created_comment)
 
 
