@@ -15,19 +15,18 @@ async def index(request: web.Request):
 
 
 async def add_post(request: web.Request):
-    in_data = await request.post()
-    print("new post", request, request.body_exists)
+    in_data = await request.json()
     created_post = await Posts.add_post(db=request.app["db"],
                                         title=in_data["title"],
                                         post_text=in_data["text"],
                                         topic=in_data["topic"],
                                         image=in_data["img"])
-    location = "/recipe/" + created_post["_id"]
+    # location = "/recipe/" + created_post["_id"]
     # print(location)
     # raise redirect(request.app.router, 'post_by_id')
-    return web.HTTPFound(location=location)
-    # if created_post:
-    #     return web.json_response(created_post)
+    # return web.HTTPFound(location=location)
+    if created_post:
+        return web.json_response(created_post["_id"])
     # else:
     #     raise web.HTTPInternalServerError
 

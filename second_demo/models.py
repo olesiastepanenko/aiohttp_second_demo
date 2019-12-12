@@ -49,8 +49,10 @@ class Posts:
             "image": image,
             "comments": []
         }
-        await db.posts.insert_one(data_dict)
-        return data_dict
+        new_post = await db.posts.insert_one(data_dict)
+        if new_post.acknowledged:
+            # print(new_post.acknowledged)
+            return data_dict
 
     @staticmethod
     async def add_comment(db: AsyncIOMotorDatabase, name: str, title: str, text:str, post_id: str):
