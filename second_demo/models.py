@@ -51,7 +51,6 @@ class Posts:
         }
         new_post = await db.posts.insert_one(data_dict)
         if new_post.acknowledged:
-            # print(new_post.acknowledged)
             return data_dict
 
     @staticmethod
