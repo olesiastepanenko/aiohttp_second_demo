@@ -35,7 +35,8 @@ class Posts:
     @staticmethod
     async def get_post_by_id(db: AsyncIOMotorDatabase, post_id):
         post_by_id = await db.posts.find_one({"_id": post_id},
-                                             {"_id": 1, "title": 1, "image": 1, "post_text": 1, "comments": 1})
+                                             {"_id": 1, "title": 1, "image": 1, "post_text": 1, "topic": 1, "comments": 1},
+                                                    sort=[('comments', pymongo.DESCENDING)])
         return post_by_id
 
     @staticmethod

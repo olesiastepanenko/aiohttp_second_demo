@@ -1,4 +1,5 @@
 from second_demo import views
+from second_demo import analyticsViews
 
 
 def setup_routes(app, base_dir):
@@ -12,4 +13,5 @@ def setup_routes(app, base_dir):
     app.router.add_get("/api/topic/{topic}", views.get_posts_by_topic_json),
     app.router.add_get("/recipe/{id}", views.get_post_detail_by_id_html, name="post_by_id"),
     app.router.add_get("/api/recipe/{id}", views.get_post_detail_by_id_json),
-    app.router.add_static("/static/", path=str("/{}/static".format(base_dir)), name="static")
+    app.router.add_post("/api/visited_post", analyticsViews.add_visited_post_analytics),
+    app.router.add_static("/static/", path=str("/{}/static".format(base_dir)), name="static"),

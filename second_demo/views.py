@@ -3,11 +3,6 @@ import aiohttp_jinja2
 from .models import Posts
 
 
-def redirect(router, route_name):
-    location = router[route_name].url_for()
-    print(location, route_name)
-    return web.HTTPFound(location)
-
 
 @aiohttp_jinja2.template("index.html")
 async def index(request: web.Request):
@@ -21,14 +16,10 @@ async def add_post(request: web.Request):
                                         post_text=in_data["text"],
                                         topic=in_data["topic"],
                                         image=in_data["img"])
-    # location = "/recipe/" + created_post["_id"]
-    # print(location)
-    # raise redirect(request.app.router, 'post_by_id')
-    # return web.HTTPFound(location=location)
     if created_post:
         return web.json_response(created_post["_id"])
-    # else:
-    #     raise web.HTTPInternalServerError
+    else:
+        raise web.HTTPInternalServerError
 
 
 async def add_comment(request: web.Request):
@@ -51,7 +42,7 @@ async def get_show_posts_json(request: web.Request):
     if all_posts:
         return web.json_response(all_posts)
     else:
-        return web.Response(text="The are no posts")
+        return web.Response(text="The are no topics")
 
 
 async def aggregate_topic(request: web.Request):
