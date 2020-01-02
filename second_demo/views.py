@@ -3,7 +3,6 @@ import aiohttp_jinja2
 from .models import Posts
 
 
-
 @aiohttp_jinja2.template("index.html")
 async def index(request: web.Request):
     pass
@@ -11,11 +10,13 @@ async def index(request: web.Request):
 
 async def add_post(request: web.Request):
     in_data = await request.json()
-    created_post = await Posts.add_post(db=request.app["db"],
-                                        title=in_data["title"],
-                                        post_text=in_data["text"],
-                                        topic=in_data["topic"],
-                                        image=in_data["img"])
+    created_post = await Posts.add_post(
+        db=request.app["db"],
+        title=in_data["title"],
+        post_text=in_data["text"],
+        topic=in_data["topic"],
+        image=in_data["img"],
+    )
     if created_post:
         return web.json_response(created_post["_id"])
     else:
@@ -24,11 +25,13 @@ async def add_post(request: web.Request):
 
 async def add_comment(request: web.Request):
     in_data = await request.json()
-    created_comment = await Posts.add_comment(db=request.app["db"],
-                                              name=in_data["name"],
-                                              title=in_data["title"],
-                                              text=in_data["text"],
-                                              post_id=in_data["post_id"])
+    created_comment = await Posts.add_comment(
+        db=request.app["db"],
+        name=in_data["name"],
+        title=in_data["title"],
+        text=in_data["text"],
+        post_id=in_data["post_id"],
+    )
     return web.json_response(created_comment)
 
 
@@ -59,8 +62,9 @@ async def get_topic_page_html(request: web.Request):
 
 
 async def get_posts_by_topic_json(self):
-    filtered_posts_by_topic = await Posts.get_posts_by_topic(db=self.app["db"],
-                                                             filter=self.match_info["topic"])
+    filtered_posts_by_topic = await Posts.get_posts_by_topic(
+        db=self.app["db"], filter=self.match_info["topic"]
+    )
     if filtered_posts_by_topic:
         return web.json_response(filtered_posts_by_topic)
     else:
@@ -74,7 +78,7 @@ async def get_post_detail_by_id_html(self):
 
 async def get_post_detail_by_id_json(self):
     # print("get_post_detail_by_id_json was called")
-    post_by_id = await Posts.get_post_by_id(db=self.app['db'], post_id=self.match_info["id"])
+    post_by_id = await Posts.get_post_by_id(db=self.app["db"], post_id=self.match_info["id"])
     # print(post_by_id)
     if post_by_id:
         return web.json_response(post_by_id)
