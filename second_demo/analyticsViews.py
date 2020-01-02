@@ -13,8 +13,8 @@ async def add_visited_post_analytics(request: web.Request):
         posts_comments_qty=client_data["posts_comments_qty"],
     )
     print("is_visit_added", is_visit_added)
-    if is_visit_added != True:
-        return web.HTTPBadRequest
+    # if is_visit_added != True:
+    #     return web.HTTPBadRequest
 
     return web.HTTPOk
 
