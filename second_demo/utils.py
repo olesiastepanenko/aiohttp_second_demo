@@ -8,14 +8,14 @@ import yaml
 
 
 def get_config(path):
-    with open(path, 'r') as f:
+    with open(path, "r") as f:
         config = yaml.safe_load(f)
         return config
 
 
 # config = get_config(config_path)
 
-#создаем клиента дб
+# создаем клиента дб
 def init_mongo(conf):
     log = logging.getLogger(__name__)
 
@@ -25,6 +25,5 @@ def init_mongo(conf):
     log.info("Connecting to DB %s", conf["mongo"]["database"])
     db = client.get_database(conf["mongo"]["database"])
 
-    log.info("Connected to %s:%s",conf["mongo"]["host"], conf["mongo"]["port"])
+    log.info("Connected to %s:%s", conf["mongo"]["host"], conf["mongo"]["port"])
     return db
-
