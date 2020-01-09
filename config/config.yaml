@@ -2,7 +2,20 @@ mongo:
   host: 127.0.0.1
   port: 27017
   database: "lusi_mongo"
+#  database: "test_db"
   max_pool_size: 5
+
+mongoTest:
+  host: 127.0.0.1
+  port: 27017
+  database: "test_db"
+  max_pool_size: 5
+
+mongoTestEmpty:
+    host: 127.0.0.1
+    port: 27017
+    database: "test_db_empty"
+    max_pool_size: 5
 
 host: 127.0.0.1
 port: 9001

@@ -18,3 +18,4 @@ def setup_routes(app, base_dir):
         "/api/clicksvscategory", analyticsViews.get_clicks_depending_frontend_request
     ),
     app.router.add_static("/static/", path=str("/{}/static".format(base_dir)), name="static"),
+

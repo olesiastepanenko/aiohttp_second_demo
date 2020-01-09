@@ -3,6 +3,10 @@ import aiohttp_jinja2
 from .models import Posts
 
 
+# async def hello(request):
+#     return web.Response(text='Hello, world')
+
+
 @aiohttp_jinja2.template("index.html")
 async def index(request: web.Request):
     pass
@@ -65,7 +69,7 @@ async def get_posts_by_topic_json(self):
     filtered_posts_by_topic = await Posts.get_posts_by_topic(
         db=self.app["db"], filter=self.match_info["topic"]
     )
-    if filtered_posts_by_topic:
+    if len(filtered_posts_by_topic) > 0:
         return web.json_response(filtered_posts_by_topic)
     else:
         raise web.HTTPNotFound()
@@ -79,8 +83,12 @@ async def get_post_detail_by_id_html(self):
 async def get_post_detail_by_id_json(self):
     # print("get_post_detail_by_id_json was called")
     post_by_id = await Posts.get_post_by_id(db=self.app["db"], post_id=self.match_info["id"])
-    # print(post_by_id)
     if post_by_id:
+        print(post_by_id)
         return web.json_response(post_by_id)
     else:
+        print("is error")
         raise web.HTTPNotFound()
+
+# async def hello(request):
+#     return web.Response(text="Hello, world")

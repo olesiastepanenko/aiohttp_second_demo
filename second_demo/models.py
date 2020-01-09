@@ -43,39 +43,43 @@ class Posts:
         )
         return post_by_id
 
+
     @staticmethod
     async def add_post(
-        db: AsyncIOMotorDatabase, title: str, post_text: str, image: str, topic: str,
+            db: AsyncIOMotorDatabase, title: str, post_text: str, image: str, topic: str,
     ):
-        data_dict = {
-            "_id": str(ObjectId()),
-            "topic": topic,
-            "title": title,
-            "post_text": post_text,
-            "date_created": str(datetime.utcnow().replace(microsecond=0)),
-            "image": image,
-            "comments": [],
-        }
-        new_post = await db.posts.insert_one(data_dict)
-        if new_post.acknowledged:
-            return data_dict
+        if len(title) and len(post_text) and len(image) and len(topic) > 0:
+            data_dict = {
+                "_id": str(ObjectId()),
+                "topic": topic,
+                "title": title,
+                "post_text": post_text,
+                "date_created": str(datetime.utcnow().replace(microsecond=0)),
+                "image": image,
+                "comments": [],
+            }
+            # class 'pymongo.results.InsertOneResult'
+            new_post = await db.posts.insert_one(data_dict)
+            # print("data_dict from models", new_post)
+            if new_post.acknowledged:
+                return data_dict
+        raise ValueError
 
     @staticmethod
     async def add_comment(db: AsyncIOMotorDatabase, name: str, title: str, text: str, post_id: str):
-        data_dict = {
-            "_id": str(ObjectId()),
-            "name": name,
-            "title": title,
-            "text": text,
-            "date_created": str(datetime.utcnow().replace(microsecond=0)),
-        }
-        # push comment to post document
-        inserted_comment = await db.posts.update_one(
-            {"_id": post_id}, {"$push": {"comments": data_dict}}
-        )
-        if inserted_comment.acknowledged:
-            # print(data_dict)
-            return data_dict
-
-
-# db.members.update({_id:1}, {$push:{comments: {name: "Lucy", "title":"Hello world 2"}}})
+        if len(name) and len(title) and len(text) and len(post_id) > 0:
+            data_dict = {
+                "_id": str(ObjectId()),
+                "name": name,
+                "title": title,
+                "text": text,
+                "date_created": str(datetime.utcnow().replace(microsecond=0)),
+            }
+            # push comment to post document
+            inserted_comment = await db.posts.update_one(
+                {"_id": post_id}, {"$push": {"comments": data_dict}}
+            )
+            if inserted_comment.acknowledged:
+                # print(inserted_comment)
+                return data_dict
+        raise ValueError

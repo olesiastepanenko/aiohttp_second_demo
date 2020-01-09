@@ -24,9 +24,9 @@ class Analytics:
             "posts_comments_qty": posts_comments_qty,
             "date_visited": datetime.utcnow().replace(microsecond=0),
         }
-        # print(new_visit_dict)
-        # add_new_visit = await db.postsVisits.insert_one(new_visit_dict)
-        # return add_new_visit.acknowledged
+        print(new_visit_dict)
+        add_new_visit = await db.postsVisits.insert_one(new_visit_dict)
+        return add_new_visit.acknowledged
 
     @staticmethod
     async def query_agreggate_for_chart(db: AsyncIOMotorDatabase):

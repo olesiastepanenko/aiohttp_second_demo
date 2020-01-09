@@ -4,7 +4,7 @@ from .analyticsModel import Analytics
 
 async def add_visited_post_analytics(request: web.Request):
     client_data = await request.json()
-    print(request)
+    print("request", request)
     is_visit_added = await Analytics.add_new_visit_to_db(
         db=request.app["db"],
         post_id=client_data["post_id"],
@@ -13,9 +13,8 @@ async def add_visited_post_analytics(request: web.Request):
         posts_comments_qty=client_data["posts_comments_qty"],
     )
     print("is_visit_added", is_visit_added)
-    # if is_visit_added != True:
-    #     return web.HTTPBadRequest
-
+    if is_visit_added != True:
+        return web.HTTPBadRequest
     return web.HTTPOk
 
 
