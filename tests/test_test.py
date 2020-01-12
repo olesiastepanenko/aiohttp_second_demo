@@ -1,6 +1,8 @@
-def bla(a:str):
-    print(a)
-    return a
 
 
-bla({"aaaa":123})
+
+a = 2
+b = "dddd"
+d = isinstance(a, int)
+c = isinstance(b, str)
+print(c, d)

@@ -16,17 +16,20 @@ class Analytics:
             post_category: str,
             posts_comments_qty: int,
     ):
-        new_visit_dict = {
-            "_id": str(ObjectId()),
-            "post_id": post_id,
-            "post_title": post_title,
-            "post_category": post_category,
-            "posts_comments_qty": posts_comments_qty,
-            "date_visited": datetime.utcnow().replace(microsecond=0),
-        }
-        print(new_visit_dict)
-        add_new_visit = await db.postsVisits.insert_one(new_visit_dict)
-        return add_new_visit.acknowledged
+        if isinstance(post_id, str) and isinstance(post_title, str) and isinstance(post_category, str) \
+                and isinstance(posts_comments_qty, int):
+            new_visit_dict = {
+                "_id": str(ObjectId()),
+                "post_id": post_id,
+                "post_title": post_title,
+                "post_category": post_category,
+                "posts_comments_qty": posts_comments_qty,
+                "date_visited": datetime.utcnow().replace(microsecond=0),
+            }
+        # print(new_visit_dict)
+            add_new_visit = await db.postsVisits.insert_one(new_visit_dict)
+            return add_new_visit.acknowledged
+        else: raise TypeError
 
     @staticmethod
     async def query_agreggate_for_chart(db: AsyncIOMotorDatabase):
@@ -88,5 +91,5 @@ class Analytics:
         data_for_chart = []
         async for doc in db.postsVisits.aggregate(pipeline):
             data_for_chart.append(doc)
-        print(type(data_for_chart))
+        # print(data_for_chart)
         return data_for_chart
