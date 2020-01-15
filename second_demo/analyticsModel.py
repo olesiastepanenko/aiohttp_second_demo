@@ -67,7 +67,7 @@ class Analytics:
         pipeline = [
             {"$match": {
                 "date_visited": {
-                    "$gte": datetime.fromisoformat(start), "$lt": datetime.fromisoformat(end)
+                    "$gte": datetime.fromisoformat(start), "$lte": datetime.fromisoformat(end)
                 }}
             },
             {"$facet": {
@@ -100,6 +100,47 @@ class Analytics:
         data_for_chart = []
         async for doc in db.postsVisits.aggregate(pipeline):
             data_for_chart.append(doc)
-        print(data_for_chart)
+        # print(data_for_chart)
         return data_for_chart
 
+    @staticmethod
+    async def query_agreggate_for_chart_month(db: AsyncIOMotorDatabase, firstDay, lastDay):
+        pipeline = [
+            {"$match": {
+                "date_visited": {
+                    "$gte": datetime.fromisoformat(firstDay), "$lte": datetime.fromisoformat(lastDay)
+                }}
+            },
+            {"$facet": {
+                "dates": [
+                    {"$group": {
+                        "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$date_visited"}},
+                    }},
+                    {"$sort": {"_id": 1}}],
+                "visits": [
+                    {"$group": {
+                        "_id": {"category": "$post_category",
+                                "date": {"$dateToString": {"format": "%Y-%m-%d", "date": "$date_visited"}},
+                                }, "count": {"$sum": 1}
+                    }
+                    }, {"$project": {
+                        "_id": 0,
+                        "date": "$_id.date",
+                        "category": "$_id.category",
+                        "value": "$count"
+                    }
+                    }, {"$sort": {"date": 1}
+                        }, {"$group": {"_id": "$category",
+                                       "data": {"$push": "$value"},
+                                       "labels": {"$push": "$date"}
+                                       }
+                            }
+                ]
+
+            }}]
+
+        data_for_chart = []
+        async for doc in db.postsVisits.aggregate(pipeline):
+            data_for_chart.append(doc)
+        # print(data_for_chart)
+        return data_for_chart
