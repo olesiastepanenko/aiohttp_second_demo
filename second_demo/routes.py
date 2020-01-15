@@ -15,6 +15,6 @@ def setup_routes(app, base_dir):
     app.router.add_get("/api/recipe/{id}", views.get_post_detail_by_id_json),
     app.router.add_post("/api/visited_post", analyticsViews.add_visited_post_analytics),
     app.router.add_get(
-        "/api/clicksvscategory", analyticsViews.get_clicks_depending_frontend_request
+        "/api/clicksvscategory/{filter}/{filterData}", analyticsViews.get_clicks_depending_frontend_request
     ),
     app.router.add_static("/static/", path=str("/{}/static".format(base_dir)), name="static"),
