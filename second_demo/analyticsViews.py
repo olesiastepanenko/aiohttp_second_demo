@@ -5,24 +5,22 @@ from datetime import datetime
 
 async def add_visited_post_analytics(request: web.Request):
     client_data = await request.json()
-    # print(request)
-    is_visit_added = await Analytics.add_new_visit_to_db(
-        db=request.app["db"],
-        post_id=client_data["post_id"],
-        post_title=client_data["post_title"],
-        post_category=client_data["post_category"],
-        posts_comments_qty=client_data["posts_comments_qty"],
-    )
-    # print("is_visit_added", is_visit_added)
-    if is_visit_added != True:
-        return web.HTTPBadRequest
+    try:
+        await Analytics.add_new_visit_to_db(
+            db=request.app["db"],
+            post_id=client_data["post_id"],
+            post_title=client_data["post_title"],
+            post_category=client_data["post_category"],
+            posts_comments_qty=client_data["posts_comments_qty"],
+        )
 
-    return web.HTTPOk
+    except Exception as e:
+        print("Exception", e)
+    return web.HTTPOk()
 
 
 async def get_clicks_depending_frontend_request(request: web.Request):
     filter = request.match_info["filter"]
-    print(request)
     if filter == "noFilters":
         analytics_chart = await Analytics.query_agreggate_for_chart_full(db=request.app["db"])
         if analytics_chart:

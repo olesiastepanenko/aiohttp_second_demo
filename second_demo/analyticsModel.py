@@ -27,6 +27,7 @@ class Analytics:
         # print(new_visit_dict)
         add_new_visit = await db.postsVisits.insert_one(new_visit_dict)
         return add_new_visit.acknowledged
+        # return new_visit_dict
 
     @staticmethod
     async def query_agreggate_for_chart_full(db: AsyncIOMotorDatabase):

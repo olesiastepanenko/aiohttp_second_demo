@@ -40,7 +40,7 @@ class Posts:
             {"_id": post_id},
             {"_id": 1, "title": 1, "image": 1, "post_text": 1, "topic": 1, "comments": 1}
         )
-        print(post_by_id)
+        # print(post_by_id)
         return post_by_id
 
     @staticmethod
@@ -75,7 +75,7 @@ class Posts:
         {"_id": post_id}, {"$push": {"comments": {"$each":[data_dict], "$sort": {"_id":-1}}}}
         )
         if inserted_comment.acknowledged:
-            print(inserted_comment)
+            # print(inserted_comment)
             return data_dict
 
 
