@@ -7,11 +7,25 @@ from operator import itemgetter
 
 class Posts:
     # all posts are sorts DESC
+    # @staticmethod
+    # async def show_all_posts(db: AsyncIOMotorDatabase, limit=100):
+    #     all_posts = await db.posts.find(
+    #         {}, {"_id": 1, "topic": 1, "title": 1, "image": 1}, sort=[("_id", pymongo.DESCENDING)]
+    #     ).to_list(limit)
+    #     return all_posts
     @staticmethod
-    async def show_all_posts(db: AsyncIOMotorDatabase, limit=100):
+    async def count_posts(db: AsyncIOMotorDatabase):
+        collection_length = await db.posts.count_documents({})
+        return collection_length
+
+
+    @staticmethod
+    async def show_all_posts(db: AsyncIOMotorDatabase, pageNum, pageSize):
+        pageNum = int(pageNum)
+        pageSize = int(pageSize)
         all_posts = await db.posts.find(
-            {}, {"_id": 1, "topic": 1, "title": 1, "image": 1}, sort=[("_id", pymongo.DESCENDING)]
-        ).to_list(limit)
+                {}, {"_id": 1, "topic": 1, "title": 1, "image": 1}, sort=[("_id", pymongo.DESCENDING)]
+                ).skip(pageSize*pageNum).to_list(pageSize)
         return all_posts
 
     @staticmethod

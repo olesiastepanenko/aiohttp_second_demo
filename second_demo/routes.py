@@ -4,7 +4,8 @@ from second_demo import analyticsViews
 
 def setup_routes(app, base_dir):
     app.router.add_get("/", views.index, name="index"),
-    app.router.add_get("/api/show_posts", views.get_show_posts_json, name="show_posts"),
+    app.router.add_get("/api/count_posts", views.get_count_posts_in_db)
+    app.router.add_get("/api/show_posts/{id}/{volume}", views.get_show_posts_json, name="show_posts"),
     app.router.add_get("/api/count_topic", views.aggregate_topic),
     app.router.add_get("/posts", views.posts, name="posts"),
     app.router.add_post("/api/add_post", views.add_post, name="add_post"),

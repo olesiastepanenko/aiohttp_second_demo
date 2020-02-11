@@ -39,9 +39,16 @@ async def add_comment(request: web.Request):
 async def posts(request: web.Request):
     pass
 
+async def get_count_posts_in_db(self):
+    count_post = await Posts.count_posts(db=self.app["db"])
+    if count_post:
+        return web.json_response(count_post)
+
 
 async def get_show_posts_json(request: web.Request):
-    all_posts = await Posts.show_all_posts(db=request.app["db"])
+    all_posts = await Posts.show_all_posts(db=request.app["db"],
+                                           pageNum=request.match_info["id"],
+                                           pageSize=request.match_info["volume"])
     if all_posts:
         return web.json_response(all_posts)
     else:
