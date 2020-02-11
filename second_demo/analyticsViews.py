@@ -16,7 +16,7 @@ async def add_visited_post_analytics(request: web.Request):
 
     except Exception as e:
         print("Exception", e)
-    return web.HTTPOk()
+    return web.Response()
 
 
 async def get_clicks_depending_frontend_request(request: web.Request):
