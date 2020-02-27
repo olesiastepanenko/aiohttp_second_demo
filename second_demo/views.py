@@ -40,7 +40,8 @@ async def posts(request: web.Request):
     pass
 
 async def get_count_posts_in_db(self):
-    count_post = await Posts.count_posts(db=self.app["db"])
+    count_post = await Posts.count_posts(db=self.app["db"],
+                                         filter=self.match_info["filter"])
     if count_post:
         return web.json_response(count_post)
 
@@ -52,7 +53,7 @@ async def get_show_posts_json(request: web.Request):
     if all_posts:
         return web.json_response(all_posts)
     else:
-        return web.Response(text="The are no topics")
+        return web.Response(text="The are no posts")
 
 
 async def aggregate_topic(request: web.Request):
@@ -70,8 +71,11 @@ async def get_topic_page_html(request: web.Request):
 
 async def get_posts_by_topic_json(self):
     filtered_posts_by_topic = await Posts.get_posts_by_topic(
-        db=self.app["db"], filter=self.match_info["topic"]
-    )
+                                    db=self.app["db"],
+                                    filter=self.match_info["topic"],
+                                    pageNum=self.match_info["id"],
+                                    pageSize=self.match_info["volume"]
+                                    )
     if filtered_posts_by_topic:
         return web.json_response(filtered_posts_by_topic)
     else:

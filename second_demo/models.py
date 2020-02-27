@@ -8,17 +8,26 @@ from operator import itemgetter
 class Posts:
 
     @staticmethod
-    async def count_posts(db: AsyncIOMotorDatabase):
-        collection_length = await db.posts.count_documents({})
-        return collection_length
+    async def count_posts(db: AsyncIOMotorDatabase, filter):
+        try:
+            if filter == "posts":
+                collection_length = await db.posts.count_documents({})
+                return collection_length
+            else:
+                collection_length = await db.posts.count_documents({"topic": filter})
+                return collection_length
+        except ValueError:
+            print("ERROR", filter)
+
 
 
     @staticmethod
     async def show_all_posts(db: AsyncIOMotorDatabase, pageNum, pageSize):
         try:
             all_posts = await db.posts.find(
-                    {}, {"_id": 1, "topic": 1, "title": 1, "image": 1}, sort=[("_id", pymongo.DESCENDING)]
-                    ).skip(int(pageSize)*int(pageNum)).to_list(int(pageSize))
+                    {}, {"_id": 1, "topic": 1, "title": 1, "image": 1},
+                    sort=[("_id", pymongo.DESCENDING)]
+                        ).skip(int(pageSize)*int(pageNum)).to_list(int(pageSize))
             return all_posts
         except ValueError:
             print("Input data are not number")
