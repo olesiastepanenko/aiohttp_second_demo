@@ -21,12 +21,13 @@ class Posts:
 
     @staticmethod
     async def show_all_posts(db: AsyncIOMotorDatabase, pageNum, pageSize):
-        pageNum = int(pageNum)
-        pageSize = int(pageSize)
-        all_posts = await db.posts.find(
-                {}, {"_id": 1, "topic": 1, "title": 1, "image": 1}, sort=[("_id", pymongo.DESCENDING)]
-                ).skip(pageSize*pageNum).to_list(pageSize)
-        return all_posts
+        try:
+            all_posts = await db.posts.find(
+                    {}, {"_id": 1, "topic": 1, "title": 1, "image": 1}, sort=[("_id", pymongo.DESCENDING)]
+                    ).skip(int(pageSize)*int(pageNum)).to_list(int(pageSize))
+            return all_posts
+        except ValueError:
+            print("Input data are not number")
 
     @staticmethod
     async def aggregate_topics(db: AsyncIOMotorDatabase):
