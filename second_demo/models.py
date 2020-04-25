@@ -32,6 +32,7 @@ class Posts:
         except ValueError:
             print("Input data are not number")
 
+
     @staticmethod
     async def aggregate_topics(db: AsyncIOMotorDatabase):
         pipeline = [{"$group": {"_id": "$topic"}}]
@@ -66,14 +67,15 @@ class Posts:
 
     @staticmethod
     async def add_post(
-        db: AsyncIOMotorDatabase, title: str, post_text: str, image: str, topic: str,
+        db: AsyncIOMotorDatabase, title: str, ingredients:str, post_text: str, image: str, topic: str,
     ):
         data_dict = {
             "_id": str(ObjectId()),
             "topic": topic,
             "title": title,
+            "ingredients": ingredients,
             "post_text": post_text,
-            "date_created": str(datetime.utcnow().replace(microsecond=0)),
+            "date_created": datetime.utcnow().replace(microsecond=0),
             "image": image,
             "comments": [],
         }
