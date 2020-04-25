@@ -27,39 +27,10 @@ class Analytics:
         # print(new_visit_dict)
         add_new_visit = await db.postsVisits.insert_one(new_visit_dict)
         return add_new_visit.acknowledged
+        # return new_visit_dict
 
     @staticmethod
-    async def query_agreggate_for_chart(db: AsyncIOMotorDatabase):
-        # Category VS Visits (Date)
-        # pipeline = [
-        #     {"$facet": {
-        #         "dates": [
-        #             {"$group": {
-        #                 "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$date_visited"}},
-        #             }},
-        #             {"$sort": {"_id": 1}}
-        #         ],
-        #         "categorys": [
-        #             {
-        #                 "$group": {
-        #                     "_id": "$post_category"
-        #                 }
-        #             }],
-        #         "visits": [{"$group": {
-        #             "_id": {"category": "$post_category",
-        #                     "date": {"$dateToString": {"format": "%Y-%m-%d", "date": "$date_visited"}}},
-        #             "count": {"$sum": 1}}},
-        #             {"$project": {
-        #                 "_id": 0,
-        #                 "label": "$_id.date",
-        #                 "category": "$_id.category",
-        #                 "value": "$count"}},
-        #             {"$sort": {"label": 1}}
-        #         ]
-        #     }
-        #     }
-        # ]
-
+    async def query_agreggate_for_chart_full(db: AsyncIOMotorDatabase):
         pipeline = [{"$facet": {
             "dates": [
                 {"$group": {
@@ -88,5 +59,89 @@ class Analytics:
         data_for_chart = []
         async for doc in db.postsVisits.aggregate(pipeline):
             data_for_chart.append(doc)
-        print(type(data_for_chart))
+        # print(data_for_chart)
+        return data_for_chart
+
+    @staticmethod
+    async def query_agreggate_for_chart_period(db: AsyncIOMotorDatabase, start, end):
+        # сейчас не включается день конца периода
+        pipeline = [
+            {"$match": {
+                "date_visited": {
+                    "$gte": datetime.fromisoformat(start), "$lte": datetime.fromisoformat(end)
+                }}
+            },
+            {"$facet": {
+                "dates": [
+                    {"$group": {
+                        "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$date_visited"}},
+                    }},
+                    {"$sort": {"_id": 1}}],
+                "visits": [
+                    {"$group": {
+                        "_id": {"category": "$post_category",
+                                "date": {"$dateToString": {"format": "%Y-%m-%d", "date": "$date_visited"}},
+                                }, "count": {"$sum": 1}
+                    }
+                    },{"$project": {
+                    "_id": 0,
+                    "date": "$_id.date",
+                    "category": "$_id.category",
+                    "value": "$count"
+                }
+                }, {"$sort": {"date": 1}
+                    }, {"$group": {"_id": "$category",
+                                   "data": {"$push": "$value"},
+                                   "labels": {"$push": "$date"}
+                                   }
+                        }
+            ]
+
+        }}]
+        data_for_chart = []
+        async for doc in db.postsVisits.aggregate(pipeline):
+            data_for_chart.append(doc)
+        # print(data_for_chart)
+        return data_for_chart
+
+    @staticmethod
+    async def query_agreggate_for_chart_month(db: AsyncIOMotorDatabase, firstDay, lastDay):
+        pipeline = [
+            {"$match": {
+                "date_visited": {
+                    "$gte": datetime.fromisoformat(firstDay), "$lte": datetime.fromisoformat(lastDay)
+                }}
+            },
+            {"$facet": {
+                "dates": [
+                    {"$group": {
+                        "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$date_visited"}},
+                    }},
+                    {"$sort": {"_id": 1}}],
+                "visits": [
+                    {"$group": {
+                        "_id": {"category": "$post_category",
+                                "date": {"$dateToString": {"format": "%Y-%m-%d", "date": "$date_visited"}},
+                                }, "count": {"$sum": 1}
+                    }
+                    }, {"$project": {
+                        "_id": 0,
+                        "date": "$_id.date",
+                        "category": "$_id.category",
+                        "value": "$count"
+                    }
+                    }, {"$sort": {"date": 1}
+                        }, {"$group": {"_id": "$category",
+                                       "data": {"$push": "$value"},
+                                       "labels": {"$push": "$date"}
+                                       }
+                            }
+                ]
+
+            }}]
+
+        data_for_chart = []
+        async for doc in db.postsVisits.aggregate(pipeline):
+            data_for_chart.append(doc)
+        # print(data_for_chart)
         return data_for_chart
