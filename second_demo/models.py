@@ -12,6 +12,7 @@ class Posts:
         all_posts = await db.posts.find(
             {}, {"_id": 1, "topic": 1, "title": 1, "image": 1}, sort=[("_id", pymongo.DESCENDING)]
         ).to_list(limit)
+        print(all_posts)
         return all_posts
 
     @staticmethod
@@ -45,14 +46,15 @@ class Posts:
 
     @staticmethod
     async def add_post(
-        db: AsyncIOMotorDatabase, title: str, post_text: str, image: str, topic: str,
+        db: AsyncIOMotorDatabase, title: str, ingredients:str, post_text: str, image: str, topic: str,
     ):
         data_dict = {
             "_id": str(ObjectId()),
             "topic": topic,
             "title": title,
+            "ingredients": ingredients,
             "post_text": post_text,
-            "date_created": str(datetime.utcnow().replace(microsecond=0)),
+            "date_created": datetime.utcnow().replace(microsecond=0),
             "image": image,
             "comments": [],
         }

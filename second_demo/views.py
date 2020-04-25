@@ -13,6 +13,7 @@ async def add_post(request: web.Request):
     created_post = await Posts.add_post(
         db=request.app["db"],
         title=in_data["title"],
+        ingredients=in_data["ingredients"],
         post_text=in_data["text"],
         topic=in_data["topic"],
         image=in_data["img"],
@@ -41,7 +42,9 @@ async def posts(request: web.Request):
 
 
 async def get_show_posts_json(request: web.Request):
+    print("request", request)
     all_posts = await Posts.show_all_posts(db=request.app["db"])
+    print("all_posts", all_posts)
     if all_posts:
         return web.json_response(all_posts)
     else:
